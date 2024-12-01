@@ -12,104 +12,192 @@ class ProfilePage extends StatelessWidget {
     return BlocProvider(
       create: (context) => TaskBloc(TaskRepository())..add(FetchTasksEvent()),
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Profile Page',
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-          centerTitle: true,
-          backgroundColor: Colors.blueAccent,
-        ),
-        body: BlocBuilder<TaskBloc, TaskState>(
-          builder: (context, state) {
-            if (state is TaskLoading) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (state is TaskLoaded) {
-              return Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Your Tasks",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blueAccent,
+        body: Column(
+          children: [
+            // Header dengan profil pengguna
+            _buildProfileHeader(),
+            Expanded(
+              child: BlocBuilder<TaskBloc, TaskState>(
+                builder: (context, state) {
+                  if (state is TaskLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (state is TaskLoaded) {
+                    return _buildTaskList(context, state.tasks);
+                  } else if (state is TaskError) {
+                    return Center(
+                      child: Text(
+                        state.message,
+                        style: const TextStyle(
+                          color: Colors.redAccent,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
+                    );
+                  }
+                  return const Center(
+                    child: Text(
+                      "No tasks available",
+                      style: TextStyle(fontSize: 16),
                     ),
-                    const SizedBox(height: 16.0),
-                    Expanded(
-                      child: ListView.builder(
-                        itemCount: state.tasks.length,
-                        itemBuilder: (context, index) {
-                          final task = state.tasks[index];
-                          return Card(
-                            elevation: 4,
-                            margin: const EdgeInsets.only(bottom: 8),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProfileHeader() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 32.0),
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Colors.blueAccent, Colors.lightBlue],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
+        borderRadius: BorderRadius.vertical(
+          bottom: Radius.circular(20.0),
+        ),
+      ),
+      child: const Row(
+        children: [
+          CircleAvatar(
+            radius: 40,
+            backgroundImage: AssetImage('assets/images/avatar.png'),
+          ),
+          SizedBox(width: 16.0),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Sareh", // Ganti dengan data pengguna jika ada
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+              SizedBox(height: 8),
+              Text(
+                "UI / UX Designer",
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTaskList(BuildContext context, List tasks) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            "Your Tasks",
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
+          ),
+          const SizedBox(height: 16.0),
+          Expanded(
+            child: ListView.builder(
+              itemCount: tasks.length,
+              itemBuilder: (context, index) {
+                final task = tasks[index];
+                return Card(
+                  elevation: 4,
+                  margin: const EdgeInsets.only(bottom: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              task.title,
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                            child: ListTile(
-                              contentPadding: const EdgeInsets.all(12.0),
-                              title: Text(
-                                task.title,
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              subtitle: Text(
-                                task.description,
-                                style: const TextStyle(fontSize: 14),
-                              ),
-                              trailing: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  IconButton(
-                                    icon: const Icon(Icons.edit,
-                                        color: Colors.blueAccent),
-                                    onPressed: () {
-                                      // Aksi untuk mengedit task
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              TaskForm(task: task),
-                                        ),
-                                      ).then((_) {
-                                        // Memicu pemuatan ulang task setelah mengedit
-                                        context
-                                            .read<TaskBloc>()
-                                            .add(FetchTasksEvent());
-                                      });
-                                    },
+                            Row(
+                              children: [
+                                IconButton(
+                                  icon: const Icon(
+                                    Icons.edit,
+                                    color: Colors.blueAccent,
                                   ),
-                                  IconButton(
-                                    icon: const Icon(Icons.delete,
-                                        color: Colors.redAccent),
-                                    onPressed: () {
-                                      // Menghapus task
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            TaskForm(task: task),
+                                      ),
+                                    ).then((_) {
                                       context
                                           .read<TaskBloc>()
-                                          .add(DeleteTaskEvent(task.id));
-                                    },
+                                          .add(FetchTasksEvent());
+                                    });
+                                  },
+                                ),
+                                IconButton(
+                                  icon: const Icon(
+                                    Icons.delete,
+                                    color: Colors.redAccent,
                                   ),
-                                ],
-                              ),
+                                  onPressed: () {
+                                    context
+                                        .read<TaskBloc>()
+                                        .add(DeleteTaskEvent(task.id));
+                                  },
+                                ),
+                              ],
                             ),
-                          );
-                        },
-                      ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          task.description,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.black54,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          'Due Date: ${task.dueDate.toLocal().toString().split(' ')[0]}',
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              );
-            } else if (state is TaskError) {
-              return Center(child: Text(state.message));
-            }
-            return const Center(child: Text("No tasks available"));
-          },
-        ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

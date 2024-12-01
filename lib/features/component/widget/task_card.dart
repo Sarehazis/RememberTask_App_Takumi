@@ -14,37 +14,106 @@ class TaskCard extends StatefulWidget {
 class _TaskCardState extends State<TaskCard> {
   @override
   Widget build(BuildContext context) {
-    final task = widget.task; // Mengambil task dari widget
+    final task = widget.task;
     return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8.0),
-      child: ListTile(
-        leading: Icon(
-          _getIconForPriority(task.priority),
-          color: _getColorForPriority(task.priority),
-        ),
-        title: Text(task.title),
-        subtitle: Column(
+      elevation: 4, // Memberikan efek bayangan
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12), // Membuat sudut membulat
+      ),
+      margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0), // Memberikan padding internal
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(task.description),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // Ikon prioritas
+                CircleAvatar(
+                  radius: 24,
+                  backgroundColor: _getColorForPriority(task.priority)
+                      .withOpacity(0.2), // Warna latar belakang transparan
+                  child: Icon(
+                    _getIconForPriority(task.priority),
+                    color: _getColorForPriority(task.priority),
+                    size: 24,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                // Informasi judul dan tanggal
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        task.title,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Due: ${task.dueDate.toLocal().toString().split(' ')[0]}',
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                // Status
+                Chip(
+                  label: Text(
+                    task.status,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  backgroundColor:
+                      _getStatusColor(task.status).withOpacity(0.2),
+                  labelStyle: TextStyle(
+                    color: _getStatusColor(task.status),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            // Deskripsi tugas
             Text(
-              'Status: ${task.status}',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: _getStatusColor(task.status),
+              task.description,
+              style: const TextStyle(
+                fontSize: 14,
+                color: Colors.black54,
               ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis, // Memotong jika terlalu panjang
             ),
-            Text(
-              'Due Date: ${task.dueDate.toLocal().toString().split(' ')[0]}',
+            const SizedBox(height: 8),
+            // Informasi tambahan
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Priority: ${task.priority}',
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: Colors.black54,
+                  ),
+                ),
+                Text(
+                  'Created: ${task.createdAt.toLocal().toString().split(' ')[0]}',
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: Colors.black54,
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-        trailing: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Text('Priority: ${task.priority}'),
-            Text(
-                'Created: ${task.createdAt.toLocal().toString().split(' ')[0]}'),
           ],
         ),
       ),

@@ -1,8 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:re_task/features/auth/bloc/app_bloc.dart';
-import 'package:re_task/features/task/bloc/task_bloc.dart'; // Import TaskBloc
+import 'package:re_task/features/statistic/bloc/statistic_bloc.dart';
+import 'package:re_task/features/statistic/data/statistic_repository.dart';
+import 'package:re_task/features/task/bloc/task_bloc.dart';
 import 'package:re_task/features/task/data/task_repository.dart';
 import 'package:re_task/router/app_router.dart';
 
@@ -24,6 +27,13 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => TaskBloc(TaskRepository()),
+        ),
+        BlocProvider(
+          create: (context) => StatisticsBloc(
+            repository: StatisticsRepository(
+              firestore: FirebaseFirestore.instance,
+            ),
+          ),
         ),
       ],
       child: MaterialApp.router(

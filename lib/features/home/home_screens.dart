@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:re_task/features/component/forum_page.dart';
 import 'package:re_task/features/component/home_page.dart';
 import 'package:re_task/features/component/profile_pages.dart';
+import 'package:re_task/features/component/statistic_page.dart';
 import 'package:re_task/features/component/widget/task_form.dart';
 import 'package:re_task/features/task/bloc/task_bloc.dart';
 import 'package:re_task/features/task/data/task_repository.dart';
@@ -28,39 +29,42 @@ class _HomeScreensState extends State<HomeScreens> {
           BlocProvider(
             create: (context) =>
                 TaskBloc(TaskRepository())..add(FetchTasksEvent()),
-            child: HomePage(),
+            child: const HomePage(),
           ),
           const ProfilePage(),
           const ForumPage(),
+          const StatisticsPage(),
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: ElevatedButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => TaskForm()),
-          ).then((_) {
-            context.read<TaskBloc>().add(FetchTasksEvent());
-          });
-        },
-        style: ElevatedButton.styleFrom(
-          elevation: 4,
-          shadowColor: Colors.indigoAccent,
-          backgroundColor: Colors.blueAccent,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(14),
+      floatingActionButton: Transform.translate(
+        offset:
+            const Offset(0, -10), // Angka negatif di Y untuk menaikkan tombol
+        child: ElevatedButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => TaskForm()),
+            ).then((_) {
+              context.read<TaskBloc>().add(FetchTasksEvent());
+            });
+          },
+          style: ElevatedButton.styleFrom(
+            elevation: 2,
+            shadowColor: Colors.indigoAccent,
+            backgroundColor: Colors.blueAccent,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 6,
+              vertical: 6,
+            ),
+            minimumSize: const Size(40, 40),
           ),
-          padding: const EdgeInsets.symmetric(
-            horizontal: 8,
-            vertical: 8,
-          ),
-        ),
-        child: const Padding(
-          padding: EdgeInsets.all(4),
-          child: Icon(
+          child: const Icon(
             Icons.add,
-            size: 16,
+            size: 14,
             color: Colors.white,
           ),
         ),
@@ -105,6 +109,12 @@ class _HomeScreensState extends State<HomeScreens> {
             onTap: () => setState(() => index = 2),
           ),
           _buildNavItem(
+            icon: Icons.bar_chart, // Ikon untuk statistik
+            label: "Stats",
+            isSelected: index == 3,
+            onTap: () => setState(() => index = 3),
+          ),
+          _buildNavItem(
             icon: Icons.logout,
             label: "Logout",
             isSelected: false,
@@ -129,21 +139,20 @@ class _HomeScreensState extends State<HomeScreens> {
     return InkWell(
       onTap: onTap,
       child: Column(
-        mainAxisAlignment:
-            MainAxisAlignment.center, // Menjaga ikon dan teks tetap terpusat
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
             icon,
-            size: 28, // Ukuran ikon lebih besar agar lebih jelas
+            size: 28,
             color: isSelected ? Colors.blueAccent : Colors.grey,
           ),
-          const SizedBox(height: 4), // Jarak antara ikon dan teks
+          const SizedBox(height: 4),
           Text(
             label,
             style: TextStyle(
               color: isSelected ? Colors.blueAccent : Colors.grey,
               fontWeight: FontWeight.w500,
-              fontSize: 12, // Ukuran teks lebih kecil agar lebih elegan
+              fontSize: 12,
             ),
           ),
         ],

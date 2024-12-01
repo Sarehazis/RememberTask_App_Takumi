@@ -87,7 +87,7 @@ void ResetPasswordView(BuildContext context) {
                   child: BlocBuilder<AppBloc, AppState>(
                     builder: (context, state) {
                       return MaterialButton(
-                        color: Colors.amber,
+                        color: Colors.blueAccent,
                         onPressed: () {
                           context.read<AppBloc>().add(AppEventResetPassword(
                               email: emailController.text));
@@ -107,7 +107,11 @@ void ResetPasswordView(BuildContext context) {
                             ),
                           );
                         },
-                        child: const Text('Send'),
+                        child: Text(
+                          'Send',
+                          style: const TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.bold),
+                        ),
                       );
                     },
                   ),

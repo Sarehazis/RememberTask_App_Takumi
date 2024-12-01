@@ -80,7 +80,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
-                            borderSide: const BorderSide(color: Colors.amber),
+                            borderSide:
+                                const BorderSide(color: Colors.blueAccent),
                           ),
                         ),
                       ),
@@ -103,7 +104,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
-                            borderSide: const BorderSide(color: Colors.amber),
+                            borderSide:
+                                const BorderSide(color: Colors.blueAccent),
                           ),
                         ),
                       ),
@@ -126,7 +128,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               visiblePassword
                                   ? Icons.visibility_off
                                   : Icons.visibility,
-                              color: Colors.amber,
+                              color: Colors.blueAccent,
                             ),
                             onPressed: () {
                               setState(() {
@@ -139,7 +141,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
-                            borderSide: const BorderSide(color: Colors.amber),
+                            borderSide:
+                                const BorderSide(color: Colors.blueAccent),
                           ),
                         ),
                       ),
@@ -162,7 +165,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               visibleConfirmPassword
                                   ? Icons.visibility_off
                                   : Icons.visibility,
-                              color: Colors.amber,
+                              color: Colors.blueAccent,
                             ),
                             onPressed: () {
                               setState(() {
@@ -176,7 +179,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
-                            borderSide: const BorderSide(color: Colors.amber),
+                            borderSide:
+                                const BorderSide(color: Colors.blueAccent),
                           ),
                         ),
                       ),
@@ -209,7 +213,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       confirm_password: ''));
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.amber,
+                                  backgroundColor: Colors.blueAccent,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12),
                                   ),
@@ -219,7 +223,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.black,
+                                    color: Colors.white,
                                   ),
                                 ),
                               ),
@@ -233,7 +237,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         child: const Text(
                           'Already have an account? Login',
                           style: TextStyle(
-                            color: Colors.amber,
+                            color: Colors.grey,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
