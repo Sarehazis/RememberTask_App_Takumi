@@ -1,6 +1,5 @@
-# re_task
+# RememberTask
 
-A new Flutter project.
 
 ## Getting Started
 
